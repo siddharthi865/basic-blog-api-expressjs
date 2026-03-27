@@ -3,10 +3,14 @@ import { z } from "zod";
 
 const postSchema = z.object({
   title: z.string().min(3),
-  content: z.string().min(10)
+  content: z.string().min(10),
 });
 
-export const validatePost = (req: Request, res: Response, next: NextFunction) => {
+export const validatePost = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     postSchema.parse(req.body);
     next();

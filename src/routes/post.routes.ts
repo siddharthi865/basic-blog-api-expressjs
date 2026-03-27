@@ -1,10 +1,11 @@
 import { Router } from "express";
+
 import {
   createPost,
   getPosts,
   getPost,
   updatePost,
-  deletePost
+  deletePost,
 } from "../controllers/post.controller.js";
 import { validatePost } from "../validators/post.validator.js";
 

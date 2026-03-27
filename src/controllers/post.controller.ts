@@ -1,12 +1,17 @@
 import { Request, Response, NextFunction } from "express";
-import { PrismaClient } from "@prisma/client";
 
-export const createPost = async (req: Request, res: Response, next: NextFunction) => {
+import prisma from "../config/prisma";
+
+export const createPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { title, content } = req.body;
 
     const post = await prisma.post.create({
-      data: { title, content }
+      data: { title, content },
     });
 
     res.status(201).json(post);
@@ -15,10 +20,14 @@ export const createPost = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export const getPosts = async (_req: Request, res: Response, next: NextFunction) => {
+export const getPosts = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const posts = await prisma.post.findMany({
-      orderBy: { createdAt: "desc" }
+      orderBy: { createdAt: "desc" },
     });
 
     res.json(posts);
@@ -27,10 +36,14 @@ export const getPosts = async (_req: Request, res: Response, next: NextFunction)
   }
 };
 
-export const getPost = async (req: Request, res: Response, next: NextFunction) => {
+export const getPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const post = await prisma.post.findUnique({
-      where: { id: Number(req.params.id) }
+      where: { id: Number(req.params.id) },
     });
 
     if (!post) {
@@ -43,13 +56,17 @@ export const getPost = async (req: Request, res: Response, next: NextFunction) =
   }
 };
 
-export const updatePost = async (req: Request, res: Response, next: NextFunction) => {
+export const updatePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { title, content } = req.body;
 
     const post = await prisma.post.update({
       where: { id: Number(req.params.id) },
-      data: { title, content }
+      data: { title, content, updatedAt: new Date() },
     });
 
     res.json(post);
@@ -58,10 +75,14 @@ export const updatePost = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export const deletePost = async (req: Request, res: Response, next: NextFunction) => {
+export const deletePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     await prisma.post.delete({
-      where: { id: Number(req.params.id) }
+      where: { id: Number(req.params.id) },
     });
 
     res.json({ message: "Post deleted" });
