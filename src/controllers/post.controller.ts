@@ -15,7 +15,7 @@ export const createPost = async (
     });
 
     if (availablePost) {
-      res.status(409).json({
+      return res.status(409).json({
         message: `Post with title '${title}' already exists!`,
       });
     }
