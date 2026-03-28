@@ -10,6 +10,16 @@ export const createPost = async (
   try {
     const { title, content } = req.body;
 
+    const availablePost = await prisma.post.findFirst({
+      where: { title: title },
+    });
+
+    if (availablePost) {
+      res.status(409).json({
+        message: `Post with title '${title}' already exists!`,
+      });
+    }
+
     const post = await prisma.post.create({
       data: { title, content },
     });
