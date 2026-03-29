@@ -21,7 +21,7 @@ export const createPost = async (
     }
 
     const post = await prisma.post.create({
-      data: { title, content },
+      data: { title, content, updatedAt: new Date() },
     });
 
     res.status(201).json(post);
@@ -73,6 +73,14 @@ export const updatePost = async (
 ) => {
   try {
     const { title, content } = req.body;
+
+    const availablePost = await prisma.post.findUnique({
+      where: { id: Number(req.params.id) },
+    });
+
+    if (!availablePost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
 
     const post = await prisma.post.update({
       where: { id: Number(req.params.id) },
