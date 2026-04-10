@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 
 import prisma from "../config/prisma";
 
+
 export const createPost = async (
   req: Request,
   res: Response,
@@ -99,6 +100,14 @@ export const deletePost = async (
   next: NextFunction,
 ) => {
   try {
+    const availablePost = await prisma.post.findUnique({
+      where: { id: Number(req.params.id) },
+    });
+
+    if (!availablePost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
     await prisma.post.delete({
       where: { id: Number(req.params.id) },
     });
